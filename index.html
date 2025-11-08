@@ -1,76 +1,89 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SACHIDAX — Packet Tracer Learning Map</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SACHIDAX — Packet Tracer Learning Map</title>
+<link rel="stylesheet" href="styles.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<!-- D3.js -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<!-- interact.js for gestures (optional) -->
+<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+<!-- html2canvas for PNG export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-  <header class="app-header">
-    <div class="brand">
-      <img src="logo.svg" alt="SACHIDAX logo" class="logo">
-      <div class="brand-text">
-        <div class="brand-name">SACHIDAX</div>
-        <div class="tag">Packet Tracer Learning Map</div>
-      </div>
-    </div>
+<header class="app-header">
+<div class="brand">
+<img src="logo.svg" alt="SACHIDAX logo" class="logo" />
+<div class="brand-text">
+<div class="title">SACHIDAX</div>
+<div class="tag">Packet Tracer Learning Map</div>
+</div>
+</div>
+<div class="controls">
+<input id="search" aria-label="Search topics" placeholder="Search topics..." />
+<div class="btn-group">
+<button id="zoom-in" title="Zoom in">＋</button>
+<button id="zoom-out" title="Zoom out">−</button>
+<button id="fit" title="Fit to screen">Fit</button>
+<button id="reset" title="Reset view">Reset</button>
+</div>
+<select id="filter-difficulty" aria-label="Filter by difficulty">
+<option value="all">All</option>
+<option value="Beginner">Beginner</option>
+<option value="Intermediate">Intermediate</option>
+<option value="Advanced">Advanced</option>
+</select>
+<button id="export-png">Export PNG</button>
+<button id="print">Print</button>
+<label class="theme-toggle"><input id="theme-toggle" type="checkbox" /> Dark</label>
+</div>
+</header>
 
-    <div class="controls">
-      <input id="search" class="search" placeholder="Search topics, e.g., 'RIP', 'VLAN'" aria-label="Search topics" />
-      <div class="toolbar">
-        <button id="zoom-in" title="Zoom in">＋</button>
-        <button id="zoom-out" title="Zoom out">−</button>
-        <button id="fit" title="Fit to view">⤢</button>
-        <button id="export-png" title="Export PNG">Export PNG</button>
-        <button id="theme-toggle" title="Toggle theme">Theme</button>
-      </div>
-    </div>
-  </header>
 
-  <main id="app">
-    <section id="canvas-card">
-      <div id="tree-wrap" role="region" aria-label="Learning tree map"></div>
-      <div id="minimap" aria-hidden="true"></div>
-    </section>
+<main>
+<div id="breadcrumb" class="breadcrumb" aria-live="polite"></div>
+<div id="map-wrap">
+<svg id="treemap-svg" role="tree"></svg>
+<div id="mini-map"></div>
+</div>
+<aside id="legend" class="legend"></aside>
+</main>
 
-    <aside id="side">
-      <div id="progress">Overall progress: <span id="overall-progress">0%</span></div>
-      <div class="info-title">Node Info</div>
-      <div id="info">Select a node to see details.</div>
-      <div class="info-title">Legend</div>
-      <div id="legend"></div>
-      <div style="margin-top:12px;">
-        <button id="expand-all">Expand All</button>
-        <button id="collapse-all">Collapse All</button>
-      </div>
-      <div style="margin-top:12px;color:var(--muted);font-size:13px">
-        Tip: Use arrow keys to move between nodes. Press Enter to open a node.
-      </div>
-    </aside>
-  </main>
 
-  <!-- Modal -->
-  <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" class="modal hidden">
-    <div class="modal-inner">
-      <header class="modal-header">
-        <img src="logo.svg" class="modal-logo" alt="SACHIDAX">
-        <h2 id="modal-title"></h2>
-        <button id="modal-close" aria-label="Close">✕</button>
-      </header>
-      <div id="modal-body" class="modal-body"></div>
-      <footer class="modal-footer">
-        <button id="mark-complete">Mark Completed</button>
-        <button id="start-lesson">Start Lesson</button>
-      </footer>
-    </div>
-  </div>
+<!-- Modal -->
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+<div class="modal-content" role="document">
+<header class="modal-header">
+<img src="logo.svg" alt="SACHIDAX" class="modal-logo" />
+<h2 id="modal-title">Title</h2>
+<button id="modal-close" aria-label="Close">✕</button>
+</header>
+<div class="modal-body">
+<p id="modal-desc"></p>
+<p><strong>Estimated time:</strong> <span id="modal-time"></span></p>
+<p><strong>Difficulty:</strong> <span id="modal-diff"></span></p>
+<p><strong>Prerequisites:</strong> <span id="modal-prereq">None</span></p>
+<div class="modal-actions">
+<button id="start-lesson">Start Lesson</button>
+<button id="mark-complete">Mark Completed</button>
+</div>
+</div>
+</div>
+</div>
 
-  <!-- Libraries -->
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <!-- html2canvas is optional (used by Export PNG) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="" crossorigin="anonymous"></script>
 
-  <script src="app.js" type="module"></script>
+<div id="onboard" class="onboard" aria-hidden="true">
+<div class="onboard-inner">
+<h3>Welcome to SACHIDAX</h3>
+<p>Try: Search → Click a node → Use mouse wheel or pinch to zoom. Press <kbd>?</kbd> for shortcuts.</p>
+<button id="onboard-close">Got it</button>
+</div>
+</div>
+
+
+<script src="app.js" defer></script>
 </body>
 </html>
