@@ -1,41 +1,42 @@
 :root{
-  --bg:#051026;
-  --panel:#071024;
-  --muted:#9fb4d6;
-  --card:#081426;
-  --glass:rgba(255,255,255,0.03);
+--bg:#0f1724; /* dark base */
+--card:#0b1220;
+--muted:#9aa4b2;
+--accent: #2b7bd3;
+--glass: rgba(255,255,255,0.03);
 }
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#e6eef8;background:linear-gradient(180deg,var(--bg),#021019)}
-.app-header{height:72px;display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:12px}
+html,body{height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#e6eef6;background:#0b1220;margin:0}
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent);backdrop-filter: blur(6px);border-bottom:1px solid rgba(255,255,255,0.02)}
 .brand{display:flex;align-items:center;gap:12px}
-.logo{width:44px;height:44px;border-radius:10px}
-.brand-name{font-weight:800;font-size:18px}
-.tag{font-size:12px;color:var(--muted)}
-.controls{display:flex;align-items:center;gap:10px}
-.search{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;min-width:220px}
-.toolbar button{margin-left:6px;padding:8px 10px;border-radius:8px;border:none;background:linear-gradient(90deg,#1f6feb,#7c3aed);color:#fff;cursor:pointer}
-#app{display:grid;grid-template-columns:1fr 360px;gap:12px;padding:12px;min-height:calc(100vh - 100px)}
-#canvas-card{background:var(--card);border-radius:12px;padding:12px;overflow:hidden;position:relative}
-#tree-wrap{width:100%;height:calc(100vh - 160px)}
-#minimap{position:absolute;right:12px;bottom:12px;width:180px;height:120px;background:rgba(0,0,0,0.45);border-radius:8px;padding:6px}
-#side{background:var(--panel);padding:12px;border-radius:12px;color:var(--muted);overflow:auto}
-.info-title{font-weight:700;margin-top:8px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center}
-.modal.hidden{display:none}
-.modal-inner{background:#041228;padding:18px;border-radius:12px;width:min(980px,95%);box-shadow:0 20px 50px rgba(2,6,23,0.7)}
+.logo{width:44px;height:44px}
+.brand-text .title{font-weight:700;letter-spacing:1px}
+.brand-text .tag{font-size:12px;color:var(--muted)}
+.controls{display:flex;align-items:center;gap:8px}
+.controls input{padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+.btn-group button{padding:8px 10px;border-radius:8px;border:0;background:var(--glass);cursor:pointer}
+#map-wrap{display:flex;gap:12px;padding:14px}
+#treemap-svg{width:100%;height:70vh;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);box-shadow:0 8px 24px rgba(2,6,23,0.6)}
+.legend{position:fixed;right:14px;top:88px;padding:10px;background:rgba(0,0,0,0.4);border-radius:10px}
+.legend .item{display:flex;gap:8px;align-items:center;padding:4px}
+.legend .swatch{width:14px;height:14px;border-radius:4px}
+.node-rect{cursor:pointer;stroke:#071023;stroke-width:1px}
+.node-label{pointer-events:none;font-size:12px}
+.badge{position:absolute;background:#0006;padding:4px 6px;border-radius:999px;color:#fff;font-size:11px}
+.breadcrumb{padding:8px 18px;color:var(--muted)}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.8));}
+.modal[aria-hidden="false"]{display:flex}
+.modal-content{background:linear-gradient(180deg,#061021,#081427);border-radius:12px;padding:18px;width:min(820px,94%);box-shadow:0 20px 60px rgba(2,6,23,0.8)}
 .modal-header{display:flex;align-items:center;gap:12px}
-.modal-logo{width:36px;height:36px}
-.modal-body{margin-top:12px;color:var(--muted)}
-.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
-button#mark-complete, button#start-lesson{padding:8px 12px;border-radius:8px;border:none;background:#16a34a;color:#fff;cursor:pointer}
+.modal-logo{width:36px}
+.modal-body p{color:var(--muted)}
+.onboard{position:fixed;right:18px;bottom:18px;background:linear-gradient(180deg,#081427,#061021);padding:12px;border-radius:10px}
+.onboard-inner h3{margin:0 0 6px 0}
 
-/* small screen adjustments */
-@media (max-width:980px){
-  #app{grid-template-columns:1fr}
-  #side{order:2}
-  #tree-wrap{height:60vh}
-}
 
-/* small hover/active for nodes (applied via JS on hover) */
-.node-hover circle{filter: drop-shadow(0 8px 20px rgba(0,0,0,0.6)); transform: translateY(-3px);}
+/* compact mode */
+@media(max-width:720px){#treemap-svg{height:64vh}.controls input{width:120px}}
+
+
+/* accessible focus states */
+button:focus, input:focus {outline:2px solid rgba(43,123,211,0.6);outline-offset:2px}
