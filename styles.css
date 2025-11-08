@@ -1,0 +1,41 @@
+:root{
+  --bg:#051026;
+  --panel:#071024;
+  --muted:#9fb4d6;
+  --card:#081426;
+  --glass:rgba(255,255,255,0.03);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#e6eef8;background:linear-gradient(180deg,var(--bg),#021019)}
+.app-header{height:72px;display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;border-radius:10px}
+.brand-name{font-weight:800;font-size:18px}
+.tag{font-size:12px;color:var(--muted)}
+.controls{display:flex;align-items:center;gap:10px}
+.search{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;min-width:220px}
+.toolbar button{margin-left:6px;padding:8px 10px;border-radius:8px;border:none;background:linear-gradient(90deg,#1f6feb,#7c3aed);color:#fff;cursor:pointer}
+#app{display:grid;grid-template-columns:1fr 360px;gap:12px;padding:12px;min-height:calc(100vh - 100px)}
+#canvas-card{background:var(--card);border-radius:12px;padding:12px;overflow:hidden;position:relative}
+#tree-wrap{width:100%;height:calc(100vh - 160px)}
+#minimap{position:absolute;right:12px;bottom:12px;width:180px;height:120px;background:rgba(0,0,0,0.45);border-radius:8px;padding:6px}
+#side{background:var(--panel);padding:12px;border-radius:12px;color:var(--muted);overflow:auto}
+.info-title{font-weight:700;margin-top:8px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center}
+.modal.hidden{display:none}
+.modal-inner{background:#041228;padding:18px;border-radius:12px;width:min(980px,95%);box-shadow:0 20px 50px rgba(2,6,23,0.7)}
+.modal-header{display:flex;align-items:center;gap:12px}
+.modal-logo{width:36px;height:36px}
+.modal-body{margin-top:12px;color:var(--muted)}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+button#mark-complete, button#start-lesson{padding:8px 12px;border-radius:8px;border:none;background:#16a34a;color:#fff;cursor:pointer}
+
+/* small screen adjustments */
+@media (max-width:980px){
+  #app{grid-template-columns:1fr}
+  #side{order:2}
+  #tree-wrap{height:60vh}
+}
+
+/* small hover/active for nodes (applied via JS on hover) */
+.node-hover circle{filter: drop-shadow(0 8px 20px rgba(0,0,0,0.6)); transform: translateY(-3px);}
